@@ -18,10 +18,10 @@ def init_db():
         db.execute('''CREATE TABLE IF NOT EXISTS users 
                    (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT, role TEXT)''')
         # إضافة مدير افتراضي إذا كانت القاعدة فارغة (اسم: admin ، كلمة سر: admin123)
-        admin_exists = db.execute("SELECT * FROM users WHERE username='HEMO'").fetchone()
+        admin_exists = db.execute("SELECT * FROM users WHERE username='admin'").fetchone()
         if not admin_exists:
             hashed_pw = generate_password_hash('i123123i')
-            db.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", ('admin', hashed_pw, 'super_admin'))
+            db.execute("INSERT OR IGNORE INTO users (username, password, role) VALUES (?, ?, ?)", ('admin', hashed_pw, 'super_admin'))
         db.commit()
 
 init_db()
